@@ -7,7 +7,11 @@ class PrototypesController < ApplicationController
   end
 
   def new
-    @prototype = Prototype.new
+    if user_signed_in?
+      @prototype = Prototype.new
+    else
+      redirect_to new_user_session_path
+    end
   end
 
   def create
@@ -54,7 +58,7 @@ class PrototypesController < ApplicationController
   def move_to_index
     @prototype = Prototype.find(params[:id])
     unless current_user == @prototype.user
-      redirect_to action: :index
+      redirect_to new_user_session_path
     end
   end
 
